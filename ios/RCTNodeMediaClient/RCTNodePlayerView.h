@@ -7,16 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <React/RCTView.h>
+#import <NodeMediaClient/NodeMediaClient.h>
 
-@interface RCTNodePlayerView : UIView
-@property (strong, nonatomic) NSString *inputUrl;
+
+@interface RCTNodePlayerView : UIView<NodePlayerDelegate>
+@property (strong, nonatomic) NSString * _Nullable inputUrl;
 @property (nonatomic) int bufferTime;
 @property (nonatomic) int maxBufferTime;
 @property (nonatomic) BOOL autoplay;
-@property (strong, nonatomic) NSString *scaleMode;
+@property (strong, nonatomic) NSString * _Nullable scaleMode;
+@property (nonatomic) RCTDirectEventBlock _Nullable onStatus;
 
 -(int)start;
 -(int)stop;
 -(int)pause;
+
 
 @end
