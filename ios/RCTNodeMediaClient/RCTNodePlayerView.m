@@ -10,7 +10,6 @@
 #import "RCTNodePlayerView.h"
 #import <NodeMediaClient/NodeMediaClient.h>
 
-
 @interface RCTNodePlayerView()
 
 @property (strong,nonatomic) NodePlayer *np;
@@ -23,11 +22,25 @@
   self = [super init];
   if(self) {
     _np = [[NodePlayer alloc] initWithPremium:[RCTNodeMediaClient premium]];
+      [_np setNodePlayerDelegate:self];
     [_np setPlayerView:self];
     _autoplay = NO;
     _inputUrl = nil;
+    _onStatus = nil;
   }
   return self;
+}
+
+-(void) onEventCallback:(nonnull id)sender event:(int)event msg:(nonnull NSString*)msg {
+    if (!_onStatus) {
+        return;
+    }
+    
+    NSLog(@"Calling _onStatus with event %i and msg %@", event, msg);
+    //_onStatus(@{ @"msg": msg, @"event": [NSNumber numberWithInteger:event] });
+    //[self setOnStatus:_onStatus];
+    self.onStatus(@{ @"msg": msg, @"event": [NSNumber numberWithInteger:event] });
+    //NSLog(@"Calling _onStatus with _onStatus %@", _onStatus);
 }
 
 - (void)setInputUrl:(NSString *)inputUrl {
@@ -65,6 +78,10 @@
     [_np start];
   }
 }
+
+//- (void)setOnStatus:(RCTDirectEventBlock)onStatus {
+//    _onStatus = onStatus;
+//}
 
 -(int)start {
   return [_np start];
